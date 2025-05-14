@@ -42,54 +42,6 @@
     </div>
   </div>
 
-  <script>
-    fetch('data.json')
-      .then(response => response.json())
-      .then(data => {
-        const commonOptions = {
-          responsive: true,
-          scales: {
-            r: {
-              angleLines: { display: true },
-              suggestedMin: 0,
-              suggestedMax: 100,
-              ticks: {
-                stepSize: 20,
-                backdropColor: 'transparent'
-              },
-              pointLabels: {
-                font: {
-                  size: 14
-                }
-              }
-            }
-          },
-          plugins: {
-            legend: {
-              position: 'top'
-            }
-          }
-        };
-
-        new Chart(document.getElementById('alumniRadarChart'), {
-          type: 'radar',
-          data: {
-            labels: data.alumniChart.labels,
-            datasets: data.alumniChart.datasets
-          },
-          options: commonOptions
-        });
-
-        new Chart(document.getElementById('programRadarChart'), {
-          type: 'radar',
-          data: {
-            labels: data.programChart.labels,
-            datasets: data.programChart.datasets
-          },
-          options: commonOptions
-        });
-      })
-      .catch(error => console.error('Error loading chart data:', error));
-  </script>
+<script src="./app.js"></script>
 </body>
 </html>
