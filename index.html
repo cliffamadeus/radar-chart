@@ -1,14 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Alumni Radar Charts</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <!-- Bootstrap CSS CDN -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-  <!-- Chart.js CDN -->
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
@@ -19,136 +15,81 @@
       text-align: center;
       margin-bottom: 30px;
     }
-
-    .flex-container{
+    .flex-container {
       display: flex;
-      align-items: center;
-      justify-self: center;
+      justify-content: center;
+      flex-wrap: wrap;
     }
     .flex-container > div {
-      background-color: #f1f1f1;
       width: 45%;
-      height: 25%;
       margin: 10px;
-      text-align: center;
-      line-height: 75px;
-      font-size: 30px;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
   </style>
 </head>
 <body>
-<div class="flex-container">
-  <div class="card">
-    <h2>Alumni Characteristics Radar Chart</h2>
-    <canvas id="alumniRadarChart"></canvas>
-  </div>
-  
-  <div class="card">
-    <h2>Program & Curriculum Contribution</h2>
-    <canvas id="programRadarChart"></canvas>
-  </div>
-  
-</div>
+  <div class="flex-container">
+    <div class="card">
+      <h2>Alumni Characteristics Radar Chart</h2>
+      <canvas id="alumniRadarChart"></canvas>
+    </div>
 
-<script>
-  // Alumni Characteristics Radar Chart
-  new Chart(document.getElementById('alumniRadarChart'), {
-    type: 'radar',
-    data: {
-      labels: [
-        'Professional Success',
-        'Institutional Loyalty',
-        'Communication & Engagement',
-        'Lifelong Learning',
-        'Philanthropy & Support'
-      ],
-      datasets: [{
-        label: 'Alumnus Profile Score',
-        data: [80, 70, 85, 75, 60], // Example values (0–100)
-        fill: true,
-        backgroundColor: 'rgba(13, 110, 253, 0.2)',
-        borderColor: 'rgba(13, 110, 253, 1)',
-        pointBackgroundColor: 'rgba(13, 110, 253, 1)',
-        pointBorderColor: '#fff',
-        pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: 'rgba(13, 110, 253, 1)'
-      }]
-    },
-    options: {
-      responsive: true,
-      scales: {
-        r: {
-          angleLines: { display: true },
-          suggestedMin: 0,
-          suggestedMax: 100,
-          ticks: {
-            stepSize: 20,
-            backdropColor: 'transparent'
+    <div class="card">
+      <h2>Program & Curriculum Contribution</h2>
+      <canvas id="programRadarChart"></canvas>
+    </div>
+  </div>
+
+  <script>
+    fetch('data.json')
+      .then(response => response.json())
+      .then(data => {
+        const commonOptions = {
+          responsive: true,
+          scales: {
+            r: {
+              angleLines: { display: true },
+              suggestedMin: 0,
+              suggestedMax: 100,
+              ticks: {
+                stepSize: 20,
+                backdropColor: 'transparent'
+              },
+              pointLabels: {
+                font: {
+                  size: 14
+                }
+              }
+            }
           },
-          pointLabels: {
-            font: {
-              size: 14
+          plugins: {
+            legend: {
+              position: 'top'
             }
           }
-        }
-      },
-      plugins: {
-        legend: {
-          position: 'top'
-        }
-      }
-    }
-  });
+        };
 
-  // Program & Curriculum Radar Chart
-  new Chart(document.getElementById('programRadarChart'), {
-    type: 'radar',
-    data: {
-      labels: [
-        'Industry Relevance',
-        'Skill Development',
-        'Practical Application',
-        'Career Preparation',
-        'Linkages with Industry & Alumni'
-      ],
-      datasets: [{
-        label: 'Program Contribution Score',
-        data: [75, 85, 70, 80, 65], // Example values (0–100)
-        fill: true,
-        backgroundColor: 'rgba(25, 135, 84, 0.2)',
-        borderColor: 'rgba(25, 135, 84, 1)',
-        pointBackgroundColor: 'rgba(25, 135, 84, 1)',
-        pointBorderColor: '#fff',
-        pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: 'rgba(25, 135, 84, 1)'
-      }]
-    },
-    options: {
-      responsive: true,
-      scales: {
-        r: {
-          angleLines: { display: true },
-          suggestedMin: 0,
-          suggestedMax: 100,
-          ticks: {
-            stepSize: 20,
-            backdropColor: 'transparent'
+        new Chart(document.getElementById('alumniRadarChart'), {
+          type: 'radar',
+          data: {
+            labels: data.alumniChart.labels,
+            datasets: data.alumniChart.datasets
           },
-          pointLabels: {
-            font: {
-              size: 14
-            }
-          }
-        }
-      },
-      plugins: {
-        legend: {
-          position: 'top'
-        }
-      }
-    }
-  });
-</script>
+          options: commonOptions
+        });
 
+        new Chart(document.getElementById('programRadarChart'), {
+          type: 'radar',
+          data: {
+            labels: data.programChart.labels,
+            datasets: data.programChart.datasets
+          },
+          options: commonOptions
+        });
+      })
+      .catch(error => console.error('Error loading chart data:', error));
+  </script>
 </body>
 </html>
